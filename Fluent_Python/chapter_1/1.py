@@ -36,6 +36,9 @@ class GameDask:
     def __init__(self, cards_dates: list[list]):
         self._cards = [GameCard(*card_dates) for card_dates in cards_dates]
 
+    def __bool__(self):
+        return bool(self._cards)
+
     def __len__(self):
         return len(self._cards)
 
@@ -43,6 +46,12 @@ class GameDask:
         res = self._cards[pos]
         del self._cards[pos]
         return res
+
+    def __add__(self, other):
+        return GameDask(self._cards + other.get_cards())
+
+    def get_cards(self):
+        return self._cards
 
 
 def questionnaire(game_dask: GameDask, res: int = 0):
@@ -53,10 +62,9 @@ def questionnaire(game_dask: GameDask, res: int = 0):
         res += 1
     else:
         print(f'Вы ошиблись вот правильный ответ:{game_card.get_answer()}')
-    if len(game_dask):
-        questionnaire(game_dask, res)
-    else:
-        return res
+    if game_dask:
+        return questionnaire(game_dask, res)
+    return res
 
 
 def start_game():
@@ -65,8 +73,8 @@ def start_game():
         ['1+2', '3'],
         ['2+3', '5']
     ]
-    count_question = 3
     game_dask = GameDask(cards_dates)
+    count_question = len(game_dask)
     res = questionnaire(game_dask)
     print(f"Всё наконец-то кончилось!\nВаши результаты:{res}/{count_question}")
 

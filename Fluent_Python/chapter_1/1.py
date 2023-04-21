@@ -79,5 +79,6 @@ def start_game():
     print(f"Всё наконец-то кончилось!\nВаши результаты:{res}/{count_question}")
 
 
-start_game()
-input()
+if __name__ == '__main__':
+    start_game()
+    input()
